@@ -24,23 +24,19 @@ A complete MERN stack URL shortener application built according to the Aganitha 
 ```
 tinylink/
 ├── backend/
-│   ├── config/
-│   │   └── database.js          # MongoDB connection
-│   ├── controllers/
-│   │   └── linkController.js    # API logic
-│   ├── middleware/
-│   │   └── errorHandler.js      # Error handling
-│   ├── models/
-│   │   └── Link.js              # Link schema
-│   ├── routes/
-│   │   ├── links.js             # API routes
-│   │   └── redirect.js          # Redirect routes
-│   ├── .env                     # Environment variables
-│   ├── .env.example             # Environment template
-│   ├── package.json             # Dependencies
-│   └── server.js                # Express server
+│   ├── src/
+│   │   ├── index.js             # Express entry
+│   │   ├── config/              # Mongo connection
+│   │   ├── controllers/         # API logic
+│   │   ├── middleware/          # Error handling
+│   │   ├── models/              # Schemas
+│   │   └── routes/              # API + redirect routes
+│   ├── .env.example             # Backend environment template
+│   ├── package.json             # Backend dependencies
+│   └── package-lock.json
 ├── frontend/
 │   ├── public/
+│   │   ├── _redirects           # SPA routing fallback
 │   │   └── index.html           # HTML template
 │   ├── src/
 │   │   ├── components/
@@ -85,6 +81,7 @@ Create `.env` file from `.env.example`:
 ```env
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/tinylink?retryWrites=true&w=majority
 BASE_URL=http://localhost:5000
+CLIENT_URL=http://localhost:3000
 PORT=5000
 NODE_ENV=development
 ```
@@ -100,6 +97,8 @@ Create `.env` file from `.env.example`:
 REACT_APP_API_URL=http://localhost:5000
 REACT_APP_BASE_URL=http://localhost:5000
 ```
+
+> ℹ️ Keep `public/_redirects` in your build output so `/code/:code` routes continue to work when deployed to Render Static Sites (rewrites all paths to `index.html`).
 
 ## 🚀 Running the Application
 
@@ -200,23 +199,24 @@ Response: 302 Redirect to original URL (increments clicks, updates lastClicked)
 
 ## 🚀 Deployment
 
-### Backend (Render)
-1. Create Web Service on Render
-2. Connect GitHub repository
-3. Build Command: `npm install`
-4. Start Command: `npm start`
-5. Environment Variables:
+### Backend (Render/Railway)
+1. Create a Web Service pointing to the `backend` directory
+2. Build Command: `npm install`
+3. Start Command: `npm start`
+4. Environment Variables:
    - `MONGODB_URI`
    - `BASE_URL=https://your-app.onrender.com`
+   - `CLIENT_URL=https://your-frontend.onrender.com`
    - `NODE_ENV=production`
 
-### Frontend (Vercel)
-1. Import project to Vercel
-2. Framework Preset: Create React App
-3. Root Directory: `frontend`
+### Frontend (Render Static / Vercel)
+1. Deploy the `frontend` directory as a static site (Render Static Site or Vercel CRA preset)
+2. Build Command: `npm install && npm run build`
+3. Output/Publish Directory: `build`
 4. Environment Variables:
    - `REACT_APP_API_URL=https://your-backend.onrender.com`
    - `REACT_APP_BASE_URL=https://your-backend.onrender.com`
+5. Include `public/_redirects` so `/code/:code` refreshes resolve to `index.html`.
 
 ### Database (MongoDB Atlas)
 1. Create MongoDB Atlas cluster

@@ -49,12 +49,13 @@ mongodb+srv://tinylink-user:YOUR_PASSWORD@tinylink-cluster.abc123.mongodb.net/ti
 
 ### 1. Prepare Repository
 1. Push your code to GitHub
-2. Ensure `backend/package.json` has correct scripts:
+2. Ensure `backend/package.json` points at `src/index.js`:
 ```json
 {
+  "main": "src/index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   }
 }
 ```
@@ -144,7 +145,7 @@ REACT_APP_BASE_URL=https://tinylink-backend.onrender.com
 ## 🔧 Post-Deployment Configuration
 
 ### 1. Update CORS Settings
-Update `backend/server.js` CORS configuration:
+Update `backend/src/index.js` CORS configuration:
 
 ```javascript
 app.use(cors({

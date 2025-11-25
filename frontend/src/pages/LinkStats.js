@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { linkAPI } from '../services/api';
 
@@ -10,22 +10,11 @@ const LinkStats = () => {
   const [error, setError] = useState('');
   const [copiedUrl, setCopiedUrl] = useState(false);
 
-  useEffect(() => {
-    fetchLinkStats();
-    
-    // Poll for updates every 2 seconds when page is visible
-    const interval = setInterval(() => {
-      if (!document.hidden) {
-        fetchLinkStats();
-      }
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [code]);
-
-  const fetchLinkStats = async () => {
+  const fetchLinkStats = useCallback(async (showSpinner = false) => {
     try {
-      setLoading(true);
+      if (showSpinner) {
+        setLoading(true);
+      }
       const data = await linkAPI.getLinkStats(code);
       setLink(data);
       setError('');
@@ -36,9 +25,24 @@ const LinkStats = () => {
         setError('Failed to fetch link stats');
       }
     } finally {
-      setLoading(false);
+      if (showSpinner) {
+        setLoading(false);
+      }
     }
-  };
+  }, [code]);
+
+  useEffect(() => {
+    fetchLinkStats(true);
+    
+    // Poll for updates every 2 seconds when page is visible
+    const interval = setInterval(() => {
+      if (!document.hidden) {
+        fetchLinkStats(false);
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [code, fetchLinkStats]);
 
   const handleCopy = async (url) => {
     try {
