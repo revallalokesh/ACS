@@ -12,6 +12,15 @@ const LinkStats = () => {
 
   useEffect(() => {
     fetchLinkStats();
+    
+    // Poll for updates every 2 seconds when page is visible
+    const interval = setInterval(() => {
+      if (!document.hidden) {
+        fetchLinkStats();
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
   }, [code]);
 
   const fetchLinkStats = async () => {
