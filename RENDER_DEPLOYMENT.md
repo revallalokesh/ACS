@@ -77,10 +77,18 @@ Click **"Environment"** and add these variables:
 Name: tinylink-frontend
 Environment: Static Site
 Branch: main
-Root Directory: frontend
+Root Directory: frontend  ⚠️ MUST BE EXACTLY "frontend" (not "src/frontend" or "./frontend")
 Build Command: npm install && npm run build
 Publish Directory: build
 ```
+
+**⚠️ CRITICAL: Root Directory Setting**
+- ✅ Correct: `frontend`
+- ❌ Wrong: `src/frontend`
+- ❌ Wrong: `./frontend`
+- ❌ Wrong: (empty)
+
+If you get error "Could not find index.html", check that Root Directory is exactly `frontend`.
 
 ### 3.3 Add Environment Variables
 | Key | Value |
@@ -135,6 +143,15 @@ Should return: `{"ok": true, "version": "1.0"}`
 - Verify `REACT_APP_API_URL` is set correctly
 - Check backend is deployed and accessible
 - Ensure no trailing slashes in URLs
+
+**5. Frontend Build Error: "Could not find index.html"**
+- **Error Message:** `Could not find a required file. Name: index.html. Searched in: /opt/render/project/src/frontend/public`
+- **Cause:** Root Directory is set incorrectly
+- **Solution:**
+  1. Go to Frontend Static Site → Settings
+  2. Check Root Directory is exactly: `frontend` (not `src/frontend`)
+  3. Save and redeploy
+- **Prevention:** When creating static site, ensure Root Directory field contains only `frontend`
 
 ## 📱 Final URLs
 
