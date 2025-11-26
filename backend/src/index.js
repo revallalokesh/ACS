@@ -16,10 +16,6 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/healthz', (req, res) => {
-  res.json({ ok: true, version: "1.0" });
-});
-
 app.use('/api/links', require('./routes/links'));
 app.use('/', require('./routes/redirect'));
 app.use(errorHandler);
