@@ -68,7 +68,9 @@ dist
 
 # Gatsby files
 .cache/
-public
+# public  # Commented out - React apps need public/ folder
+# But ignore build output
+frontend/build/
 
 # Storybook build outputs
 .out
@@ -97,8 +99,6 @@ Thumbs.db
 # Build outputs
 build/
 dist/
-
-# React build
 frontend/build/
 
 # Package lock files (optional - you can keep these)
